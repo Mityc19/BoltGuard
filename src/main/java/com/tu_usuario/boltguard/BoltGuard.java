@@ -1,23 +1,33 @@
-
 package com.tu_usuario.boltguard;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import com.tu_usuario.boltguard.listeners.PlayerListener;
-import com.tu_usuario.boltguard.commands.*;
 
 public class BoltGuard extends JavaPlugin {
+
+    private StorageManager storage;
+
     @Override
     public void onEnable() {
         saveDefaultConfig();
+
+        storage = new StorageManager(this);
+
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
-        getCommand("bgreload").setExecutor(new BGReloaderCommand(this));
-        getCommand("bginfo").setExecutor(new BGInfoCommand(this));
-        getCommand("bgviolations").setExecutor(new BGViolationsCommand(this));
-        getLogger().info("BoltGuard activo.");
+
+        this.getCommand("bgreload").setExecutor(new ReloadCommand(this));
+        this.getCommand("bginfo").setExecutor(new InfoCommand(this));
+        this.getCommand("bgviolations").setExecutor(new BGViolationsCommand(this));
+        this.getCommand("freeze").setExecutor(new FreezeCommand(this));
+
+        getLogger().info("BoltGuard activado.");
     }
 
     @Override
     public void onDisable() {
         getLogger().info("BoltGuard desactivado.");
+    }
+
+    public StorageManager getStorage() {
+        return storage;
     }
 }
