@@ -1,0 +1,24 @@
+name: BoltGuard
+main: com.boltguard.BoltGuard
+version: 1.1
+api-version: 1.8
+commands:
+  bgreload:
+    description: Recarga la configuración de BoltGuard
+    permission: boltguard.admin
+  bginfo:
+    description: Muestra información del plugin
+    permission: boltguard.admin
+  bgviolations:
+    description: Muestra historial de violaciones de un jugador
+    permission: boltguard.staff
+  freeze:
+    description: Congela o descongela un jugador
+    permission: boltguard.staff
+permissions:
+  boltguard.admin:
+    description: Permiso para comandos de administración
+    default: op
+  boltguard.staff:
+    description: Permiso para comandos de staff
+    default: op
