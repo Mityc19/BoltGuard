@@ -1,0 +1,17 @@
+
+debug: false
+alerts:
+  enabled: true
+  sound: true
+  staff-only: true
+
+checks:
+  fly:
+    enabled: true
+    maxAirTime: 500
+  speed:
+    enabled: true
+    maxBlocksPerSecond: 6.5
+  autoclicker:
+    enabled: true
+    maxCPS: 20
