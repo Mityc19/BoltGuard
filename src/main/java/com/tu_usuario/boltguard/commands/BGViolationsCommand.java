@@ -1,14 +1,14 @@
-
 package com.tu_usuario.boltguard.commands;
 
 import com.tu_usuario.boltguard.BoltGuard;
-import com.tu_usuario.boltguard.storage.ViolationStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class BGViolationsCommand implements CommandExecutor {
+
     private final BoltGuard plugin;
 
     public BGViolationsCommand(BoltGuard plugin) {
@@ -16,19 +16,67 @@ public class BGViolationsCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!sender.hasPermission("boltguard.staff")) {
+            sender.sendMessage("§cNo tienes permiso para usar este comando.");
+            return true;
+        }
+
         if (args.length != 1) {
             sender.sendMessage("§cUso: /bgviolations <jugador>");
             return true;
         }
-        String playerName = args[0];
-        ViolationStorage storage = plugin.getStorage();
-        if (!storage.hasViolations(playerName)) {
-            sender.sendMessage("§a[BoltGuard] §fNo hay violaciones registradas para " + playerName + ".");
-        } else {
-            sender.sendMessage("§a[BoltGuard] §fViolaciones de " + playerName + ":");
-            storage.getViolations(playerName).forEach(v -> sender.sendMessage(" - " + v));
+
+        Player target = Bukkit.getPlayerExact(args[0]);
+        if (target == null) {
+            sender.sendMessage("§cJugador no encontrado.");
+            return true;
         }
+
+        int violations = plugin.getStorage().getViolations(target.getName());
+        sender.sendMessage("§a" + target.getName() + " tiene " + violations + " violaciones detectadas.");
+
+        return true;
+    }
+}
+package com.tu_usuario.boltguard.commands;
+
+import com.tu_usuario.boltguard.BoltGuard;
+import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+public class BGViolationsCommand implements CommandExecutor {
+
+    private final BoltGuard plugin;
+
+    public BGViolationsCommand(BoltGuard plugin) {
+        this.plugin = plugin;
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!sender.hasPermission("boltguard.staff")) {
+            sender.sendMessage("§cNo tienes permiso para usar este comando.");
+            return true;
+        }
+
+        if (args.length != 1) {
+            sender.sendMessage("§cUso: /bgviolations <jugador>");
+            return true;
+        }
+
+        Player target = Bukkit.getPlayerExact(args[0]);
+        if (target == null) {
+            sender.sendMessage("§cJugador no encontrado.");
+            return true;
+        }
+
+        int violations = plugin.getStorage().getViolations(target.getName());
+        sender.sendMessage("§a" + target.getName() + " tiene " + violations + " violaciones detectadas.");
+
         return true;
     }
 }
